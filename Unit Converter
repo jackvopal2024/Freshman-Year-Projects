@@ -1,0 +1,168 @@
+//unit converter default project. converts units. 
+//added conversion units (kph, mph) for more options.
+//program will prompt the user if he/she would like to rerun.
+//program will prompt the user if he/she would like work to be shown. Only if it is desired will the work be shown.
+
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int ask_meas_type();
+int ask_units();
+double get_value();
+double c_to_f(double value);
+double f_to_c(double value);
+double g_to_l(double value);
+double l_to_g(double value);
+double m_to_f(double value);
+double f_to_m(double value);
+double mph_to_kph(double value);
+double kph_to_mph(double value);
+void convert(int f_choice, int s_choice, double value);
+
+int main() {
+    bool repeat_main = true;
+    while (repeat_main) {
+        int f_choice = ask_meas_type();
+        if (f_choice < 1 || f_choice > 4) {
+            cout << "Invalid choice of conversion type." << endl;
+            return EXIT_FAILURE;
+        }
+
+        int s_choice = ask_units();
+        if (s_choice < 1 || s_choice > 2) {
+            cout << "Invalid choice of measurement type." << endl;
+            return EXIT_FAILURE;
+        }
+
+        double gotten_value = get_value();
+        if (f_choice == 2) {
+            if (s_choice == 1 && gotten_value < -273.15) {
+                cout << "Invalid range of units.";
+                return 1;
+            }
+            if (s_choice == 2 && gotten_value < -459.67) {
+                cout << "Invalid range of units.";
+                return 1;
+            }}
+        if (f_choice == 1 || f_choice == 3 || f_choice == 4) {
+            if (s_choice == 2 && gotten_value < 0) {
+                cout << "Invalid range of units.";
+                return 1;
+            }}
+        convert(f_choice, s_choice, gotten_value);
+
+        string run_again;
+        cout << "\nType any key if you like like to rerun.\nType '0' if you would like the program to stop.\n";
+        getline(cin, run_again);
+        if (run_again == "0") {
+            repeat_main = false;
+        }
+
+    }
+    return 0;
+}
+
+int ask_meas_type() {
+    cout << "Choose the type 1-4 of measurement to convert:\n";
+    cout << "1) Distance \n2) Temperature \n3) Mass \n4) Speed ";
+    cout << "\nEnter your choice: ";
+    string f_choice;
+    getline(cin, f_choice);
+    return stoi(f_choice);
+}
+
+int ask_units() {
+    cout << "Choose the type 1-2 of unit to convert: \n";
+    cout << "1) Metric \n2) Imperial\n";
+    cout << "Enter your choice: ";
+    string s_choice;
+    getline(cin, s_choice);
+    return stoi(s_choice);
+}
+
+double get_value() {
+    cout << "Enter the value: ";
+    string value;
+    getline(cin, value);
+    return stod(value);
+}
+
+void convert(int f_choice, int s_choice, double value) {
+    cout << "Type any key if you would like only the answer to be shown.\nType '1' if you would like the work to be shown as well.";
+    string show_work;
+    getline(cin, show_work);
+
+    if (show_work == "1") {
+        if (f_choice == 1) {
+            if (s_choice == 1)
+                cout << "\nTo convert feet into meters, we will simply multiply the input by 3.28. For this problem, we will take the value of " << value << " * 3.28 to get the answer of " << f_to_m(value) << " meters." << endl;
+            else if (s_choice == 2)
+                cout << "\nTo convert meters into feet, we will simply divide the input by 3.28. For this problem, we will take the value of  " << value << " / 3.28 to the the answer of " << m_to_f(value) << " feet." << endl;
+        } else if (f_choice == 2) {
+            if (s_choice == 1)
+                cout << "\nTo convert Celsius into Fahrenheit, we will take the value of " << value << " and multiply it by the fraction 9/5 to get " << c_to_f(value - 32) << ". Next, we add 32 to get the final answer of " << c_to_f(value) << "degrees Fahrenheit" << endl;
+            else if (s_choice == 2)
+                cout << "\nTo convert Fahrenheit to Celsius, we will take the value of " << value << " and multiply it by the fraction 5/9 to get " << f_to_c(value + 32) << ". Next we subtract 32 to get the final answer of " << f_to_c(value) << " degrees Celsius." << endl;
+        } else if (f_choice == 3) {
+            if (s_choice == 1)
+                cout << "\nTo convert grams to pounds, we will simply divide the input by 453.592. For this problem, we will take the value of " << value << " / 453.592 to get the answer of " << g_to_l(value) << " grams." << endl;
+            else if (s_choice == 2)
+                cout << "\nTo convert pounds to grams, we will simply multiply the input by 453.592. For this problem, we will take the value of " << value << " * 453.592 to get the answer of  " << l_to_g(value) << " pounds." << endl;
+        } else if (f_choice == 4) {
+            if (s_choice == 1)
+                cout << "\nTo convert kilometers/hour to miles/hour, we will simply divide the input by 1.609344. In this problem, we will take the value of "<< value << " / 1.609344 to get the answer of " << kph_to_mph(value) << " mph." << endl;
+            else if (s_choice == 2)
+                cout << "\nTo convert miles/hour to kilometers/hour, we will simply multiply the input by 1.609344. In this problem, we will take the value of " << value << " * 1.609344 to get the answer of " << mph_to_kph(value) << "mph." << endl;
+        }
+    } else {
+        cout << "\nConversion result: \n";
+        if (f_choice == 1) {
+            if (s_choice == 1)
+                cout << f_to_m(value) << " meters." << endl;
+            else if (s_choice == 2)
+                cout << m_to_f(value) << " feet." << endl;
+        } else if (f_choice == 2) {
+            if (s_choice == 1)
+                cout << c_to_f(value) << " degrees Fahrenheit." << endl;
+            else if (s_choice == 2)
+                cout << f_to_c(value) << " degrees Celsius." << endl;
+        } else if (f_choice == 3) {
+            if (s_choice == 1)
+                cout << g_to_l(value) << " grams." << endl;
+            else if (s_choice == 2)
+                cout << l_to_g(value) << " pounds." << endl;
+        } else if (f_choice == 4) {
+            if (s_choice == 1)
+                cout << kph_to_mph(value) << " mph." << endl;
+            else if (s_choice == 2)
+                cout << mph_to_kph(value) << " kph." << endl;
+        }
+    }
+}
+double m_to_f(double value) {
+    return value * 3.28084;
+}
+double f_to_m(double value) {
+    return value / 3.28084;
+}
+double c_to_f(double value) {
+    return value * 1.8 + 32;
+}
+double f_to_c(double value) {
+    return (value - 32) / 1.8;
+}
+double g_to_l(double value) {
+    return value / 453.592;
+}
+double l_to_g(double value) {
+    return value * 453.592;
+}
+double kph_to_mph(double value){
+    return value / 1.609344;
+}
+double mph_to_kph(double value){
+    return value * 1.609344;
+}
