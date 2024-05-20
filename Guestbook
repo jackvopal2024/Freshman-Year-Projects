@@ -1,0 +1,48 @@
+A cool little project that writes from one file into another. I'm a bit new to File (I/0) but had a lot of fun trying it!
+
+When users ('guests') run your program, they can view the guestbook (the list of names of previous users) and enter their name into the guestbook.  Even if the program ends or the computer running it shuts down, these names need to persist.  When the program starts up again, it should display a list of all guests.
+Simply storing guests' names in a variable or variables would be insufficient because this data exists on the RAM- which is volatile.  Instead, we'll have to use File Input and Output to achieve this goal.
+
+
+
+#include <iostream>
+#include <string>
+#include <fstream>
+
+void display_guest_book() {
+    std::ifstream guestbookFile("guestbook.txt");
+    if (guestbookFile.is_open()) {
+        std::cout << "Guestbook contents:" << std::endl;
+        std::string line;
+        while (std::getline(guestbookFile, line)) {
+            std::cout << line << std::endl;
+        }
+        guestbookFile.close();
+    } else {
+        std::cout << "Guestbook is empty" << std::endl;
+    }
+}
+
+int main() {
+    display_guest_book(); // Display guestbook contents before prompting user to sign
+
+    std::string name;
+    std::cout << "Enter your name to sign the guestbook or type 'quit':" << std::endl;
+    while (name != "quit") {
+        std::getline(std::cin, name);
+        if (name != "quit") {
+            std::ofstream guestbookFile("guestbook.txt", std::ios::app);
+            if (guestbookFile.is_open()) {
+                guestbookFile << name << std::endl;
+                guestbookFile.close();
+            } else {
+                std::cout << "Unable to open guest file" << std::endl;
+                return 1;
+            }
+            std::cout << "Enter your name to sign the guestbook or type 'quit':" << std::endl;
+        }
+    }
+    std::cout << "Goodbye!" << std::endl;
+
+    return 0;
+}
